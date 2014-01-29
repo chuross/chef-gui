@@ -33,9 +33,16 @@ if platform?('ubuntu')
 	end
 
 	template '/etc/default/locale' do
-		source 'locale-ja.erb'
+		source 'ubuntu-ja.erb'
 		action :touch
 	end
-else
-	Chef::Application.fatal!('No supported on other OS.')
+elsif platform?('centos')
+	execute 'japanese support' do
+		command 'yum -y groupinstall "Japanese Support"'
+	end
+
+	template '/etc/sysconfig/i18n' do
+		source 'centos-ja.erb'
+		action :touch
+	end
 end
